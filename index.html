@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Othello</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <h1>Welcome to Othello game</h1>
+    <input type="text" id="txt" >
+    <button onclick="connect()">Login</button>
+    <p id="message"></p>
+    <p id="content"></p>
+
+    <script>
+        var textField = document.getElementById('txt');
+        var message = document.getElementById('message');
+        var content = document.getElementById('content');
+
+        var socket = io();
+
+        function connect() {
+            socket.emit('login', {
+                username: textField.value
+            });
+
+            socket.on('login-success', (payload) => {
+                message.innerHTML = payload.message;
+
+                content.innerHTML = payload.users;
+            });
+
+            socket.on('login-fail', (payload) => {
+                message.innerHTML = payload.message;
+            });
+        }
+    </script>
+</body>
+</html>
